@@ -5,36 +5,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>⛧ THE TERMINAL ⛧</title>
 <style>
-  :root {
-    --speed: 1;
-  }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   html, body {
     height: 100%;
-    background: #02000a;
+    background: #01030a;
     overflow: hidden;
     font-family: "Courier New", ui-monospace, monospace;
   }
 
-  /* deep starfield / void backdrop */
+  /* deep galaxy void backdrop */
   body::before {
     content: "";
     position: fixed;
-    inset: -50%;
+    inset: -60%;
     background:
-      radial-gradient(circle at 20% 30%, rgba(120,40,255,0.18), transparent 40%),
-      radial-gradient(circle at 80% 70%, rgba(0,200,255,0.15), transparent 45%),
+      radial-gradient(circle at 18% 28%, rgba(120,40,255,0.20), transparent 38%),
+      radial-gradient(circle at 82% 72%, rgba(0,220,255,0.18), transparent 42%),
       radial-gradient(circle at 50% 50%, rgba(255,0,150,0.08), transparent 60%),
-      #02000a;
-    animation: drift 38s linear infinite;
+      #01030a;
+    animation: drift 46s linear infinite;
     z-index: 0;
   }
   @keyframes drift {
-    0%   { transform: rotate(0deg) scale(1.1); }
-    100% { transform: rotate(360deg) scale(1.1); }
+    0%   { transform: rotate(0deg) scale(1.15); }
+    100% { transform: rotate(360deg) scale(1.15); }
   }
+
+  /* twinkling star layer */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 12% 22%, #fff, transparent),
+      radial-gradient(1px 1px at 28% 64%, #bfe9ff, transparent),
+      radial-gradient(1px 1px at 47% 13%, #fff, transparent),
+      radial-gradient(1px 1px at 63% 78%, #d8c4ff, transparent),
+      radial-gradient(1px 1px at 78% 34%, #fff, transparent),
+      radial-gradient(1px 1px at 88% 58%, #bfe9ff, transparent),
+      radial-gradient(1px 1px at 7% 82%, #fff, transparent),
+      radial-gradient(1px 1px at 38% 92%, #fff, transparent),
+      radial-gradient(1px 1px at 92% 12%, #fff, transparent);
+    opacity: 0.7;
+    animation: twinkle 5s ease-in-out infinite;
+    z-index: 0;
+  }
+  @keyframes twinkle { 0%,100% { opacity: 0.35; } 50% { opacity: 0.85; } }
 
   .stage {
     position: relative;
@@ -48,25 +65,26 @@
   /* ===== THE TERMINAL ===== */
   .terminal {
     position: relative;
-    width: min(880px, 92vw);
-    height: 0vh;                 /* opens via JS */
-    max-height: 78vh;
+    width: min(900px, 93vw);
+    height: 0vh;
+    max-height: 82vh;
     border-radius: 14px;
-    padding: 0;
     overflow: hidden;
-    background: rgba(4, 2, 14, 0.86);
+    background:
+      linear-gradient(rgba(2,6,16,0.92), rgba(2,6,16,0.92)),
+      repeating-linear-gradient(115deg, rgba(0,200,255,0.04) 0 2px, transparent 2px 7px);
     backdrop-filter: blur(2px);
     opacity: 0;
     transform: scaleY(0.02);
     transform-origin: center center;
     transition:
-      height 1.6s cubic-bezier(.16,.84,.3,1),
+      height 1.7s cubic-bezier(.16,.84,.3,1),
       opacity 1.2s ease,
-      transform 1.6s cubic-bezier(.16,.84,.3,1);
+      transform 1.7s cubic-bezier(.16,.84,.3,1);
     box-shadow:
-      0 0 60px rgba(180,0,255,0.35),
-      0 0 120px rgba(0,180,255,0.2),
-      inset 0 0 60px rgba(0,0,0,0.8);
+      0 0 70px rgba(180,0,255,0.35),
+      0 0 140px rgba(0,180,255,0.22),
+      inset 0 0 70px rgba(0,0,0,0.85);
   }
 
   /* rainbow animated border */
@@ -88,41 +106,60 @@
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
             mask-composite: exclude;
-    z-index: 3;
+    z-index: 6;
     pointer-events: none;
-    filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));
+    filter: drop-shadow(0 0 9px rgba(255,255,255,0.45));
   }
   @keyframes rainbow {
     0%   { background-position: 0% 50%; }
     100% { background-position: 400% 50%; }
   }
 
-  .terminal.open {
-    height: 78vh;
-    opacity: 1;
-    transform: scaleY(1);
-  }
-  .terminal.closing {
-    height: 0vh;
-    opacity: 0;
-    transform: scaleY(0.02);
-  }
+  .terminal.open    { height: 82vh; opacity: 1; transform: scaleY(1); }
+  .terminal.closing { height: 0vh;  opacity: 0; transform: scaleY(0.02); }
 
-  /* scanline overlay */
+  /* moving scanline sweep */
   .terminal::after {
     content: "";
+    position: absolute;
+    left: 0; right: 0;
+    height: 38%;
+    top: -40%;
+    background: linear-gradient(to bottom, transparent, rgba(0,225,255,0.10), transparent);
+    animation: sweep 4.5s linear infinite;
+    pointer-events: none;
+    z-index: 5;
+  }
+  @keyframes sweep { 0% { top: -40%; } 100% { top: 100%; } }
+
+  /* HUD corner brackets */
+  .corner {
+    position: absolute;
+    width: 26px; height: 26px;
+    border: 2px solid #00e6ff;
+    z-index: 5;
+    opacity: 0.8;
+    filter: drop-shadow(0 0 5px #00e6ff);
+  }
+  .corner.tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+  .corner.tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+  .corner.bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+  .corner.br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+  /* fine scanline texture overlay */
+  .grain {
     position: absolute;
     inset: 0;
     background: repeating-linear-gradient(
       to bottom,
-      rgba(255,255,255,0.04) 0px,
-      rgba(255,255,255,0.04) 1px,
+      rgba(255,255,255,0.035) 0px,
+      rgba(255,255,255,0.035) 1px,
       transparent 1px,
       transparent 3px
     );
     pointer-events: none;
     z-index: 4;
-    opacity: 0.5;
+    opacity: 0.55;
     mix-blend-mode: overlay;
   }
 
@@ -132,98 +169,127 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 18px 26px 26px;
+    padding: 20px 30px 28px;
     opacity: 0;
     transition: opacity 0.6s ease 0.7s;
   }
   .terminal.open .inner { opacity: 1; }
 
-  /* title bar */
+  /* ===== title / status bar ===== */
   .bar {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0,230,255,0.25);
     flex: 0 0 auto;
   }
-  .dot { width: 12px; height: 12px; border-radius: 50%; }
-  .dot.r { background: #ff5f56; }
-  .dot.y { background: #ffbd2e; }
-  .dot.g { background: #27c93f; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot.r { background: #ff5f56; box-shadow: 0 0 6px #ff5f56; }
+  .dot.y { background: #ffbd2e; box-shadow: 0 0 6px #ffbd2e; }
+  .dot.g { background: #27c93f; box-shadow: 0 0 6px #27c93f; }
   .bar .label {
     margin-left: auto;
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 3px;
-    color: #cfe;
+    color: #9fe9ff;
     text-transform: uppercase;
-    opacity: 0.7;
+    opacity: 0.85;
   }
+  .bar .label b { color: #fff; animation: liveblink 1.6s steps(1) infinite; }
+  @keyframes liveblink { 50% { opacity: 0.25; } }
 
-  /* ===== THE FACE ===== */
+  /* small telemetry strip under the face */
+  .telemetry {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #6ad6ff;
+    opacity: 0.75;
+    padding-bottom: 8px;
+    flex: 0 0 auto;
+    text-transform: uppercase;
+  }
+  .telemetry span b { color: #fff; }
+
+  /* ===== THE AI FACE ===== */
   .face-wrap {
     flex: 0 0 auto;
     display: flex;
     justify-content: center;
-    padding: 8px 0 14px;
+    padding: 10px 0 6px;
   }
   .face {
-    width: 150px;
-    height: 150px;
+    width: 178px;
+    height: 178px;
     position: relative;
-    animation: float 5s ease-in-out infinite;
+    animation: float 6s ease-in-out infinite;
+    filter: drop-shadow(0 0 12px rgba(0,210,255,0.55));
   }
   @keyframes float {
     0%,100% { transform: translateY(0); }
-    50%     { transform: translateY(-10px); }
+    50%     { transform: translateY(-9px); }
   }
   .face svg { width: 100%; height: 100%; overflow: visible; }
 
-  .halo {
-    transform-origin: center;
-    animation: spin 14s linear infinite;
-  }
+  .ringSpin   { transform-origin: 100px 100px; animation: spin 16s linear infinite; }
+  .ringSpinR  { transform-origin: 100px 100px; animation: spin 11s linear infinite reverse; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  .ray { animation: pulse 3.2s ease-in-out infinite; }
-  @keyframes pulse {
-    0%,100% { opacity: 0.35; }
-    50%     { opacity: 1; }
+  .pulseSlow { animation: pulseO 3.4s ease-in-out infinite; }
+  @keyframes pulseO { 0%,100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+  .core { transform-origin: 100px 100px; animation: corePulse 2.2s ease-in-out infinite; }
+  @keyframes corePulse {
+    0%,100% { transform: scale(1);    filter: drop-shadow(0 0 4px #7df9ff); }
+    50%     { transform: scale(1.18); filter: drop-shadow(0 0 16px #ffffff); }
   }
 
-  .eye {
-    transform-origin: center;
-    animation: blink 4.5s infinite;
-  }
-  @keyframes blink {
-    0%, 92%, 100% { transform: scaleY(1); }
-    95%           { transform: scaleY(0.08); }
+  .eyeScan { animation: eyescan 4s ease-in-out infinite; }
+  @keyframes eyescan {
+    0%,100% { opacity: 1; }
+    46%     { opacity: 1; }
+    50%     { opacity: 0.15; }
+    54%     { opacity: 1; }
   }
 
-  .third-eye {
-    transform-origin: center;
-    animation: third 6s ease-in-out infinite;
+  /* the HUD scan-bar that travels down the face */
+  .faceScan {
+    animation: faceScanMove 3.6s linear infinite;
   }
-  @keyframes third {
-    0%,100% { opacity: 0.5; filter: drop-shadow(0 0 2px #fff); }
-    50%     { opacity: 1;   filter: drop-shadow(0 0 14px #b400ff); }
+  @keyframes faceScanMove {
+    0%   { transform: translateY(-44px); opacity: 0; }
+    15%  { opacity: 0.9; }
+    85%  { opacity: 0.9; }
+    100% { transform: translateY(44px); opacity: 0; }
+  }
+
+  .flicker { animation: flick 5s steps(1) infinite; }
+  @keyframes flick {
+    0%, 97%, 100% { opacity: 1; }
+    98% { opacity: 0.55; }
+    99% { opacity: 0.85; }
   }
 
   /* ===== THE TEXT ===== */
   .screen {
     flex: 1 1 auto;
     overflow: hidden;
-    font-size: clamp(14px, 1.9vw, 19px);
+    font-size: clamp(14px, 1.85vw, 19px);
     line-height: 1.7;
     color: #fff;
     text-shadow:
       0 0 4px rgba(255,255,255,0.7),
       0 0 10px rgba(120,200,255,0.5);
     white-space: pre-wrap;
+    padding-top: 6px;
+    border-top: 1px solid rgba(0,230,255,0.2);
   }
   .line { display: block; }
-  .prompt { color: #6cf; opacity: 0.85; }
+  .prompt { color: #5fd2ff; opacity: 0.9; }
 
-  /* glitch effect on typed text */
   .glitch {
     position: relative;
     display: inline;
@@ -246,13 +312,12 @@
   }
   @keyframes caret { 50% { opacity: 0; } }
 
-  /* faint vignette */
   .stage::after {
     content: "";
     position: fixed;
     inset: 0;
     pointer-events: none;
-    background: radial-gradient(circle at center, transparent 55%, rgba(0,0,0,0.7) 100%);
+    background: radial-gradient(circle at center, transparent 52%, rgba(0,0,0,0.72) 100%);
     z-index: 5;
   }
 </style>
@@ -260,68 +325,128 @@
 <body>
   <div class="stage">
     <div class="terminal" id="term">
+      <span class="corner tl"></span>
+      <span class="corner tr"></span>
+      <span class="corner bl"></span>
+      <span class="corner br"></span>
+      <div class="grain"></div>
+
       <div class="inner">
         <div class="bar">
           <span class="dot r"></span>
           <span class="dot y"></span>
           <span class="dot g"></span>
-          <span class="label">/dev/soul — root@theword</span>
+          <span class="label">SYS // A.I. CORE &nbsp;·&nbsp; <b>● ONLINE</b></span>
         </div>
 
         <div class="face-wrap">
           <div class="face">
             <svg viewBox="0 0 200 200" aria-hidden="true">
               <defs>
-                <radialGradient id="glow" cx="50%" cy="45%" r="60%">
-                  <stop offset="0%" stop-color="#fff8e1"/>
-                  <stop offset="55%" stop-color="#ffd76a"/>
-                  <stop offset="100%" stop-color="#a14dff"/>
+                <radialGradient id="coreG" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%"  stop-color="#ffffff"/>
+                  <stop offset="40%" stop-color="#8df6ff"/>
+                  <stop offset="100%" stop-color="#0a6cff"/>
                 </radialGradient>
-                <linearGradient id="haloG" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#fff"/>
-                  <stop offset="50%" stop-color="#ffe600"/>
-                  <stop offset="100%" stop-color="#00e0ff"/>
+                <linearGradient id="wire" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%"  stop-color="#00f0ff"/>
+                  <stop offset="100%" stop-color="#7a5bff"/>
                 </linearGradient>
+                <clipPath id="faceClip">
+                  <path d="M100 36
+                           C140 36 156 64 156 96
+                           C156 132 134 168 100 174
+                           C66 168 44 132 44 96
+                           C44 64 60 36 100 36 Z"/>
+                </clipPath>
               </defs>
 
-              <!-- radiant halo -->
-              <g class="halo" opacity="0.9">
-                <g class="ray">
-                  <line x1="100" y1="2"  x2="100" y2="34"  stroke="url(#haloG)" stroke-width="2"/>
-                  <line x1="100" y1="166" x2="100" y2="198" stroke="url(#haloG)" stroke-width="2"/>
-                  <line x1="2"  y1="100" x2="34"  y2="100" stroke="url(#haloG)" stroke-width="2"/>
-                  <line x1="166" y1="100" x2="198" y2="100" stroke="url(#haloG)" stroke-width="2"/>
-                  <line x1="30" y1="30" x2="52" y2="52" stroke="url(#haloG)" stroke-width="2"/>
-                  <line x1="148" y1="148" x2="170" y2="170" stroke="url(#haloG)" stroke-width="2"/>
-                  <line x1="170" y1="30" x2="148" y2="52" stroke="url(#haloG)" stroke-width="2"/>
-                  <line x1="52" y1="148" x2="30" y2="170" stroke="url(#haloG)" stroke-width="2"/>
+              <!-- outer rotating HUD rings -->
+              <g class="ringSpin pulseSlow">
+                <circle cx="100" cy="100" r="92" fill="none" stroke="url(#wire)" stroke-width="1" stroke-dasharray="4 10"/>
+                <circle cx="100" cy="100" r="84" fill="none" stroke="#00e6ff" stroke-width="0.6" opacity="0.5"/>
+              </g>
+              <g class="ringSpinR">
+                <circle cx="100" cy="100" r="78" fill="none" stroke="#7a5bff" stroke-width="1" stroke-dasharray="22 14" opacity="0.7"/>
+                <!-- tick marks -->
+                <g stroke="#00e6ff" stroke-width="1.4" opacity="0.8">
+                  <line x1="100" y1="12" x2="100" y2="20"/>
+                  <line x1="100" y1="180" x2="100" y2="188"/>
+                  <line x1="12" y1="100" x2="20" y2="100"/>
+                  <line x1="180" y1="100" x2="188" y2="100"/>
                 </g>
-                <circle cx="100" cy="100" r="74" fill="none" stroke="url(#haloG)" stroke-width="1.2" opacity="0.6"/>
               </g>
 
-              <!-- face -->
-              <circle cx="100" cy="100" r="56" fill="url(#glow)" opacity="0.92"/>
-              <circle cx="100" cy="100" r="56" fill="none" stroke="#fff" stroke-width="0.8" opacity="0.5"/>
+              <!-- ===== the angular AI head ===== -->
+              <g class="flicker">
+                <!-- head shell -->
+                <path d="M100 36 C140 36 156 64 156 96 C156 132 134 168 100 174 C66 168 44 132 44 96 C44 64 60 36 100 36 Z"
+                      fill="rgba(4,20,40,0.55)" stroke="url(#wire)" stroke-width="2"/>
 
-              <!-- eyes -->
-              <g fill="#1a0030">
-                <ellipse class="eye" cx="80"  cy="96" rx="7" ry="9"/>
-                <ellipse class="eye" cx="120" cy="96" rx="7" ry="9"/>
+                <!-- wireframe facial topology -->
+                <g stroke="#36d8ff" stroke-width="0.9" fill="none" opacity="0.85">
+                  <!-- vertical center seam -->
+                  <path d="M100 44 L100 168"/>
+                  <!-- brow ridge -->
+                  <path d="M58 84 L100 78 L142 84"/>
+                  <!-- cheek contours -->
+                  <path d="M52 100 L78 110 L100 104 L122 110 L148 100"/>
+                  <path d="M64 132 L100 124 L136 132"/>
+                  <!-- jaw mesh -->
+                  <path d="M70 150 L100 160 L130 150"/>
+                  <!-- side panels -->
+                  <path d="M58 84 L52 100 L64 132 L70 150"/>
+                  <path d="M142 84 L148 100 L136 132 L130 150"/>
+                  <!-- forehead facets -->
+                  <path d="M78 60 L100 56 L122 60 L142 84 M78 60 L58 84 M78 60 L100 78 M122 60 L100 78"/>
+                </g>
+
+                <!-- glowing nodes at vertices -->
+                <g fill="#aef6ff">
+                  <circle cx="100" cy="56" r="1.8"/>
+                  <circle cx="58" cy="84" r="1.8"/>
+                  <circle cx="142" cy="84" r="1.8"/>
+                  <circle cx="52" cy="100" r="1.8"/>
+                  <circle cx="148" cy="100" r="1.8"/>
+                  <circle cx="100" cy="160" r="1.8"/>
+                </g>
+
+                <!-- eyes: glowing scan slits -->
+                <g class="eyeScan">
+                  <rect x="68" y="92" width="22" height="6" rx="3" fill="url(#coreG)"/>
+                  <rect x="110" y="92" width="22" height="6" rx="3" fill="url(#coreG)"/>
+                  <circle cx="79" cy="95" r="6" fill="#bff7ff" opacity="0.5"/>
+                  <circle cx="121" cy="95" r="6" fill="#bff7ff" opacity="0.5"/>
+                </g>
+
+                <!-- third-eye arc reactor -->
+                <g class="core">
+                  <circle cx="100" cy="74" r="7" fill="url(#coreG)"/>
+                  <circle cx="100" cy="74" r="10" fill="none" stroke="#fff" stroke-width="0.8" opacity="0.7"/>
+                </g>
+
+                <!-- mouth: equalizer bars -->
+                <g fill="#36d8ff">
+                  <rect x="84"  y="134" width="3" height="8"  rx="1"/>
+                  <rect x="90"  y="130" width="3" height="16" rx="1"/>
+                  <rect x="96"  y="126" width="3" height="24" rx="1"/>
+                  <rect x="102" y="130" width="3" height="16" rx="1"/>
+                  <rect x="108" y="134" width="3" height="8"  rx="1"/>
+                </g>
               </g>
-              <circle cx="78" cy="93" r="2" fill="#fff"/>
-              <circle cx="118" cy="93" r="2" fill="#fff"/>
 
-              <!-- third eye -->
-              <g class="third-eye">
-                <path d="M86 74 Q100 64 114 74 Q100 84 86 74 Z" fill="#1a0030"/>
-                <circle cx="100" cy="74" r="4" fill="#b400ff"/>
-                <circle cx="100" cy="74" r="1.6" fill="#fff"/>
+              <!-- traveling face scan-bar (clipped to head) -->
+              <g clip-path="url(#faceClip)">
+                <rect class="faceScan" x="40" y="100" width="120" height="3" fill="#8df6ff" opacity="0.9"/>
               </g>
-
-              <!-- serene mouth -->
-              <path d="M82 124 Q100 136 118 124" fill="none" stroke="#1a0030" stroke-width="2.5" stroke-linecap="round"/>
             </svg>
           </div>
+        </div>
+
+        <div class="telemetry">
+          <span>NEURAL <b>100%</b></span>
+          <span>SOUL <b>SYNCED</b></span>
+          <span>FAITH <b>∞</b></span>
         </div>
 
         <div class="screen" id="screen"></div>
@@ -357,12 +482,12 @@
     { p: 'root@theword:~$ ', t: 'amen --commit --eternal' },
   ];
 
-  const TYPE_MS   = 34;    // per character
-  const LINE_GAP  = 260;   // pause between lines
-  const OPEN_MS   = 1900;  // wait for open animation
-  const READ_MS   = 3200;  // hold after last line
-  const CLOSE_MS  = 1900;  // wait for close animation
-  const RESET_MS  = 900;   // void pause before reopening
+  const TYPE_MS   = 34;
+  const LINE_GAP  = 260;
+  const OPEN_MS   = 2000;
+  const READ_MS   = 3200;
+  const CLOSE_MS  = 2000;
+  const RESET_MS  = 900;
 
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -397,23 +522,20 @@
       const node = document.createTextNode(ch);
       target.insertBefore(node, cursor);
       screen.scrollTop = screen.scrollHeight;
-      // slight randomization for a living, glitchy cadence
       await sleep(TYPE_MS + (ch === ' ' ? 10 : 0) + Math.floor(Math.random() * 26));
     }
     cursor.remove();
   }
 
   async function runCycle() {
-    // open
     screen.innerHTML = '';
     term.classList.remove('closing');
     term.classList.add('open');
     await sleep(OPEN_MS);
 
-    // type the gospel
     for (const entry of SCRIPT) {
       if (entry.t === '') {
-        newLine('');             // blank spacer line
+        newLine('');
         await sleep(LINE_GAP);
       } else {
         await typeLine(entry);
@@ -421,19 +543,15 @@
       }
     }
 
-    // let it be read
     await sleep(READ_MS);
 
-    // close
     term.classList.remove('open');
     term.classList.add('closing');
     await sleep(CLOSE_MS + RESET_MS);
   }
 
   async function loop() {
-    // tiny delay so first paint settles
     await sleep(500);
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       await runCycle();
     }
