@@ -1,0 +1,19 @@
+{
+  "name": "Doth Punk Command",
+  "short_name": "DPC",
+  "description": "Transmissions on God, Bitcoin, cryptocurrency, and code — a glitch-terminal oracle.",
+  "id": "/dpc",
+  "start_url": "/dpc",
+  "scope": "/dpc",
+  "display": "standalone",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "any",
+  "background_color": "#01030a",
+  "theme_color": "#01030a",
+  "categories": ["lifestyle", "education", "entertainment"],
+  "icons": [
+    { "src": "/dpc/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/dpc/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/dpc/icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
